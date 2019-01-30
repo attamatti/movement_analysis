@@ -1,0 +1,5 @@
+trajectory_frame_1.pdb
+trajectory_frame_2.pdb
+trajectory_frame_3.pdb
+trajectory_frame_4.pdb
+trajectory_frame_5.pdb
