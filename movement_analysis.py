@@ -18,6 +18,7 @@ chimerapath='/fbs/emsoftware2/LINUX/fbsmi/Chimera-1.11.2-linux/bin/chimera'
 alignedpath = '{0}/aligned'.format(os.getcwd())
 resultspath = '{0}/Results'.format(os.getcwd())
 tmppath = '{0}/TMP'.format(os.getcwd())
+devapath = '{0}/Results/deviation_analysis'.format(os.getcwd())
 
 if len(sys.argv) < 3:
     sys.exit('''
@@ -38,6 +39,8 @@ def make_directories():
         subprocess.call(['mkdir',resultspath])
     if os.path.isdir(tmppath) == False:
         subprocess.call(['mkdir',tmppath])
+    if os.path.isdir(devapath) == False:
+        subprocess.call(['mkdir',devapath])
 
 def get_files():
     print('----- files to operate on -----')
@@ -288,7 +291,7 @@ def calc_dist(xyz1,xyz2):
     return distance,xdif+ydif+zdif
 
 def do_deviation_analysis(modpdb,refpdb):
-    devaout = open('{0}/deva_{1}_ft_{2}.txt'.format(resultspath,modpdb.replace('.pdb',''),refpdb.replace('.pdb','')),'w')
+    devaout = open('{0}/deva_{1}_ft_{2}.txt'.format(devapath,modpdb.replace('.pdb',''),refpdb.replace('.pdb','')),'w')
     devaout.write('aa,dev(Angstrom)')
     coords1,aanos1 =  getpoints(open('{0}/{1}'.format(alignedpath,modpdb),'r').readlines())
     coords2,aanos2 =  getpoints(open('{0}/{1}'.format(alignedpath,refpdb),'r').readlines())
@@ -314,7 +317,7 @@ def do_deviation_analysis(modpdb,refpdb):
     
     print('Ca deviation (RMSD,min,max)   {0}\t{1}\t{2}'.format(round(rmsd,2),round(dmin,2),round(dmax,2)))
     #print(chimeraout)
-    outfile = open('{0}/deva_{1}.cmd'.format(resultspath,modpdb.replace('.pbd','')),'w')
+    outfile = open('{0}/deva_{1}.cmd'.format(devapath,modpdb.replace('.pbd','')),'w')
     outfile.write(''.join(chimeraout))
     devaout.close()
 def deviation_analysis(bodydic):
