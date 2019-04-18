@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-# quantify the movements of the POTRAs using Chimera mmaker and fitmap
+#### update the path to chimera here ############
+
+chimerapath='/fbs/emsoftware2/LINUX/fbsmi/Chimera-1.11.2-linux/bin/chimera'
+
+#################################################
 
 
 import os
@@ -9,8 +13,9 @@ import math
 import subprocess
 import numpy as np
 
-vers = 0.3
-chimerapath='/fbs/emsoftware2/LINUX/fbsmi/Chimera-1.11.2-linux/bin/chimera'
+vers = 0.5
+if os.path.isfile(chimerapath) == False:
+	sys.exit("\nERROR: can't find UCSF Chimera at {0}\nupdate the path by editing the script".format(chimerapath))
 alignedpath = '{0}/aligned'.format(os.getcwd())
 resultspath = '{0}/Results'.format(os.getcwd())
 tmppath = '{0}/TMP'.format(os.getcwd())

@@ -49,7 +49,7 @@ List file is one pdb per line, 1st one is used as the reference
 
 Start and end residues define the part of the model that is held static during the alignments
 
-3) Finally run the script:
+3) Finally run the script.  It requires a copy of UCSF chimera, edit the script to point to your installation.
 
 USAGE: movement_analysis.py <body definition file> <models file>
 
