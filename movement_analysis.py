@@ -2,10 +2,6 @@
 
 # quantify the movements of the POTRAs using Chimera mmaker and fitmap
 
-#
-#TO DO:
-# add center of mass normalization
-# add sanity check.. calculate Ca RMSD of fit pdb vs actual - compare to mm RMSD - should be close... flag if too high
 
 import os
 import sys
@@ -20,8 +16,7 @@ resultspath = '{0}/Results'.format(os.getcwd())
 tmppath = '{0}/TMP'.format(os.getcwd())
 devapath = '{0}/Results/deviation_analysis'.format(os.getcwd())
 
-if len(sys.argv) < 3:
-    sys.exit('''
+errormsg = '''
 USAGE: movement_analysis.py <body definition file> <models file>
 ---
 body definition file = four columns text file
@@ -29,8 +24,12 @@ body_name       start_AA        end_AA      chain
 
 models file -  text file list of models one per line -  models must be in order of the motion    
 
----''')
+---'''
 
+if len(sys.argv) < 3:
+    sys.exit(errormsg)
+if os.path.isfile(sys.argv[1]) == False or os.path.isfile(sys.argv[2]) == False:
+    sys.exit(errormsg)
 
 def make_directories():
     if os.path.isdir(alignedpath) == False:
