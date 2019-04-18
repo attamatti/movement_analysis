@@ -8,14 +8,17 @@ movement 1	distance (A)    direction
           	6.96 (-2.71, 0.43, 6.4)
 rotation angles x	y	z
             	-1.6	-1.25	-4.82
+
 movement 2	distance (A)    direction
           	2.16 (-2.12, 0.14, 0.43)
 rotation angles	x	y	z
             	-9.65	-4.09	-1.18
+
 movement 3	distance (A)    direction
           	3.61 (-1.82, 1.23, 2.86)
 rotation angles	x	y	z
             	0.26	-1.2	-4.2
+
 movement 4	distance (A)    direction
           	9.13 (-7.28, -3.22, -4.47)
 rotation angles	x	y	z
