@@ -22,7 +22,7 @@ devapath = '{0}/Results/deviation_analysis'.format(os.getcwd())
 
 if len(sys.argv) < 3:
     sys.exit('''
-USAGE: calculate_POTRA_movements.py <body definition file> <models file>
+USAGE: movement_analysis.py <body definition file> <models file>
 ---
 body definition file = four columns text file
 body_name       start_AA        end_AA      chain
@@ -220,6 +220,7 @@ def draw_globes(chimeraline,ovec1,ovec2,ovec3):
 
         ## draw globes here
         if first == True:
+            output.write('.comment movement {0} to {1}\n'.format(chimeraline[0][0][0],chimeraline[0][0][1]))
             output.write('.color {0}\n'.format(colors[cc]))
             output.write('.v {0} {1} {2} {3} {4} {5} \n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0),xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
             output.write('.sphere {0} {1} {2} 0.5\n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0)))
@@ -231,8 +232,9 @@ def draw_globes(chimeraline,ovec1,ovec2,ovec3):
             output.write('.cylinder {0} {1} {2} {3} {4} {5} 0.1\n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0),ovpoint3.item(0,0),ovpoint3.item(1,0),ovpoint3.item(2,0)))
             cc+=1
         if first == False:
-            output.write('{} {} {}\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
+            output.write('{0} {1} {2}\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
         first = False
+        output.write('.comment movement {0} to {1}\n'.format(chimeraline[0][0][0],chimeraline[0][0][1]))
         output.write('.color {0}\n'.format(colors[cc]))
         output.write('.sphere {0} {1} {2} 0.5\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
         output.write('.color white\n')
