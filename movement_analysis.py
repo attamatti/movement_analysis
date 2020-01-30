@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 
 #### update the path to chimera here ############
-
-chimerapath='/fbs/emsoftware2/LINUX/fbsmi/Chimera-1.11.2-linux/bin/chimera'
-
+chimerapath='/Applications/Chimera.app/Contents/MacOS/chimera'
 #################################################
-
 
 import os
 import sys
@@ -47,7 +44,7 @@ def make_directories():
         subprocess.call(['mkdir',devapath])
 
 def get_files():
-    print('----- files to operate on -----')
+    print('-------------------\nfiles to operate on\n-------------------')
     pdbfiles = open(sys.argv[2],'r').readlines()
     pdblist = []
     for i in pdbfiles:
@@ -58,12 +55,11 @@ def get_files():
 def get_bodies():
     allbodies = []
     bodydeffile = open(sys.argv[1],'r').readlines()
-    print('----- body definitions ------\nname    start   end     chain')
+    print('\n----------------\nbody definitions\n----------------\nname    start   end     chain')
     for i in bodydeffile:
         line = i.split()
         print('{0}\t{1}\t{2}\t{3}'.format(line[0],line[1],line[2],line[3]))
         allbodies.append((line[0],range(int(line[1]),int(line[2])),line[3]))
-    print('-----------------------------')
     return(allbodies)
 
 def slice_n_save(pdbfile,potrarange):
@@ -86,11 +82,10 @@ def slice_n_save(pdbfile,potrarange):
     for i in goodlines[1:]:
         output.write('\n{0}'.format(i))
     output.close()
-    print('making sub body pdb: {0}'.format(filename))
+    print('{0}'.format(filename))
     return(filename)
 
 def write_chimera_script(path,expPDB,refPDB):
-    print('writing chimera script in: TMP/chimera_script.cmd')
     output.write('open #0 {0}/{1};'.format(path,expPDB))
     output.write('wait;')
     output.write('open #1 {0}/{1};'.format(path,refPDB))
@@ -104,6 +99,7 @@ def write_chimera_script(path,expPDB,refPDB):
 
 def make_sub_pdbs(pdblist,allbodies):
     outlist = []        # list of sliced pdb files made
+    print('''\n-------------------------\nmaking sub-body pdb files\n-------------------------''')
     for file in pdblist:
         for potra in allbodies:
             outlist.append((slice_n_save(file,potra),potra[0]))
@@ -119,9 +115,9 @@ def order_bodies(subpdblist):
         bkeys = bodies.keys()
     bkeys.sort()
     
-    print('''----------------------\nbody models (in order)\n----------------------''')
+    print('''\n----------------------\nbody models (in order)\n----------------------''')
     for i in bkeys:
-        print i,bodies[i]
+        print (i,bodies[i])
     return(bodies,bkeys)
 
 def make_body_pairs(bodkeys,bodydic):
@@ -133,9 +129,9 @@ def make_body_pairs(bodkeys,bodydic):
             except:
                 pass
             
-    print('''------------------------------------------------------------------\nsets for comparison (mobile pdb, reference pdb, reference density)\n------------------------------------------------------------------''')
+    print('''\n------------------------------------------------------------------\nsets for comparison (reference pdb / mobile pdb)\n------------------------------------------------------------------''')
     for i in bodypairs:
-        print i
+        print ('{0} / {1}'.format(i[0],i[1]))
     return(bodypairs)
 
 def parse_chimera_out(chimera_data,files_in_order):
@@ -144,7 +140,6 @@ def parse_chimera_out(chimera_data,files_in_order):
     files,matrices,rmsds = [],[],[]
     lc = 0
     for i in chimera_data:
-        #print i
         if 'Matrix rotation and translation' in i:
             matrixdata = chimera_data[lc+1:lc+4]
             tmatrix = np.array([matrixdata[0].split(),matrixdata[1].split(),matrixdata[2].split(),[0.0,0.0,0.0,1.0]],dtype=float)
@@ -179,25 +174,9 @@ def divide_into_bodies(clean_chimera_data):
             bodies[bodname].append(i)
     return(bodies)
 
-def RMtoEuler(R) : 
-    sy = math.sqrt(R[0,0] * R[0,0] +  R[1,0] * R[1,0])
-    singular = sy < 1e-6
-    if  not singular :
-        x = math.atan2(R[2,1] , R[2,2])
-        y = math.atan2(-R[2,0], sy)
-        z = math.atan2(R[1,0], R[0,0])
-    else :
-        x = math.atan2(-R[1,2], R[1,1])
-        y = math.atan2(-R[2,0], sy)
-        z = 0
- 
-    return([x, y, z])
-
 def draw_globes(chimeraline,ovec1,ovec2,ovec3):
     '''draws the globes representing the motions (rot and trans) of the bodies'''
     vectors = [[],[]]
-    eulerlist = []
-    xyzrotlist = []
     first = True
     colors = ('red','blue','yellow','purple','pink','green')
     cc = 0
@@ -217,10 +196,6 @@ def draw_globes(chimeraline,ovec1,ovec2,ovec3):
         xovpoint2 = np.dot(i[1],ovpoint2)
         xovpoint3 = np.dot(i[1],ovpoint3)
         vectors[1].append(xformed_COM)
-
-        #  calculate the euler angles
-        eulerlist.append(RMtoEuler(i[1]))
-
 
         ## draw globes here
         if first == True:
@@ -256,28 +231,7 @@ def draw_globes(chimeraline,ovec1,ovec2,ovec3):
             pass
         cc+=1
         
-    return((vectors,eulerlist))
-
-def write_movements_output(adkeys,analysisdic):
-    movementsout = open('{0}/movements_output.txt'.format(resultspath),'w')
-    movementsout.write('body, movement, distance, directionx, directiony, directionz, rotx, roty, rotz')
-    for i in adkeys:
-        print('''----------\n{0}\n----------'''.format(i))
-        mcount = 1
-        for group in analysisdic[i]:
-            for pair in zip(group[0][0],group[0][1],group[1]):
-                dvec= pair[0]-pair[1]
-                print ('movement {0}\tdistance (A)    direction'.format(mcount))
-                x2 = (pair[0].item(0,0)-pair[1].item(0,0))**2
-                y2 = (pair[0].item(1,0)-pair[1].item(1,0))**2
-                z2 = (pair[0].item(2,0)-pair[1].item(2,0))**2
-                print('          \t{0} ({1}, {2}, {3})'.format(np.round(math.sqrt(x2+y2+z2),2),np.round(dvec.item(0,0),2),np.round(dvec.item(1,0),2),np.round(dvec.item(2,0),2)))
-                print 'rotation angles\tx\ty\tz'
-                print('            \t{0}\t{1}\t{2}'.format(round(np.degrees(pair[2][0]),2),round(np.degrees(pair[2][1]),2),round(np.degrees(pair[2][2]),2)))
-                movementsout.write('\n{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t'.format(i,mcount,np.round(math.sqrt(x2+y2+z2),2),np.round(dvec.item(0,0),2),np.round(dvec.item(1,0),2),np.round(dvec.item(2,0),2),round(np.degrees(pair[2][0]),2),round(np.degrees(pair[2][1]),2),round(np.degrees(pair[2][2]),2)))
-                mcount+=1
-    
-    movementsout.close()
+    return(i[1])
 
 def getpoints(pdbfile):
     aas = []
@@ -321,16 +275,17 @@ def do_deviation_analysis(modpdb,refpdb):
         chimeraout.append('color #FF{0}{0} :{1};'.format("%0.2X" % color,i))
     chimeraout.append('colorkey  0.75,0.65  0.85,0.85 labelcolor black {0} white  {1} red'.format(dmin,dmax))
     
-    print('Ca deviation (RMSD,min,max)   {0}\t{1}\t{2}'.format(round(rmsd,2),round(dmin,2),round(dmax,2)))
-    #print(chimeraout)
+    print('{0}\t{1}\t{2}\t{3}\t{4} / {5}'.format(round(rmsd,2),round(dmin,2),round(dmax,2),refpdb.split('_')[0],'_'.join(refpdb.split('_')[1:]).replace('.pdb',''),'_'.join(modpdb.split('_')[1:]).replace('_ft_{0}'.format(refpdb),'')))
     outfile = open('{0}/deva_{1}.cmd'.format(devapath,modpdb.replace('.pbd','')),'w')
     outfile.write(''.join(chimeraout))
     devaout.close()
+
 def deviation_analysis(bodydic):
     deva_outs = {}
+    bdkeys = list(bodydic)
+    bdkeys.sort()
     for i in bodydic:
         for j in bodydic[i]:
-            print('Ca deviations between',j[0])
             try:
                 deva_outs[j[0][0]].append(do_deviation_analysis('{0}_ft_{1}'.format(j[0][0].replace('.pdb',''),j[0][1]),'{0}'.format(j[0][1])))
             except:
@@ -358,8 +313,7 @@ for i in body_pairs_inorder:
 output.close()   
 
 # run the chimera script - capture the output:
-print('running chimera')
-runchimera = subprocess.Popen('{0} --nogui {1}/chimera_script.cmd'.format(chimerapath,tmppath), shell=True, stdout=subprocess.PIPE)
+runchimera = subprocess.Popen('{0} --nogui {1}/chimera_script.cmd 2>/dev/null'.format(chimerapath,tmppath), shell=True, stdout=subprocess.PIPE)
 chimeraout = runchimera.stdout.read()
 chimera_outfile = open('{0}/movements_raw.txt'.format(resultspath),'w')
 chimera_data = []
@@ -373,36 +327,30 @@ boddic = divide_into_bodies(all_data)
 
 # do the movement analysis and write the bild files
 output = open('{0}/movements.bild'.format(resultspath),'w')
+outdata = open('{0}/movements_data.bild'.format(resultspath),'w')
 ortho1 = np.array([[10],[0],[0],[1]])
 ortho2 = np.array([[0],[10],[0],[1]])
 ortho3 = np.array([[0],[0],[10],[1]])
 analysisdic = {}
 for bod in boddic:
-    try:
-        analysisdic[bod].append(draw_globes(boddic[bod],ortho1,ortho2,ortho3))
-    except:
-        analysisdic[bod] = [draw_globes(boddic[bod],ortho1,ortho2,ortho3)]
-adkeys = analysisdic.keys()
-adkeys.sort()
-write_movements_output(adkeys,analysisdic)
+    (draw_globes(boddic[bod],ortho1,ortho2,ortho3))
+
+## write the output file:
+bodykeys = list(boddic)
+bodykeys.sort()
+for i in bodykeys:
+    outdata.write('\nBody {0}\n'.format(i))
+    for j in boddic[i]:
+        outdata.write('\nmovement {0}\n'.format(' to '.join([x.replace('.pdb','') for x in j[0]])))
+        outdata.write('{0}\n'.format(str(j[1][0:3]).replace('[',' ').replace(']',' ')))
+
 
 #do the Ca deviation analysis
-print('''---------------------\nCa deviation analysis\n---------------------\n''')
+print('''\n---------------------\nCa deviation analysis\n---------------------\nRMSD\tmin\tmax\tbody\tpdbs''')
 deviation_analysis(boddic)
 
 
 ### cleanup
-print('clean up temp files')
+print('\n----------------------\nCleaning up temp files\n----------------------')
 subprocess.call(['rm','-r','TMP'])
 print('FINISHED')
-
-#########TESTING
-
-#print pdb_files
-#print all_bodies
-#print sub_pdbs
-#print body_dic
-#print bkeys
-#print body_pairs_inorder
-#print(chimeraoutput)
-#print all_data
