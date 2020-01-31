@@ -201,31 +201,31 @@ def draw_globes(chimeraline,ovec1,ovec2,ovec3):
         if first == True:
             output.write('.comment movement {0} to {1}\n'.format(chimeraline[0][0][0],chimeraline[0][0][1]))
             output.write('.color {0}\n'.format(colors[cc]))
-            output.write('.v {0} {1} {2} {3} {4} {5} \n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0),xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
+            output.write('.cylinder {0} {1} {2} {3} {4} {5} 0.1 \n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0),xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
             output.write('.sphere {0} {1} {2} 0.5\n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0)))
             output.write('.color white\n')
-            output.write('.cylinder {0} {1} {2} {3} {4} {5} 0.1\n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0),ovpoint1.item(0,0),ovpoint1.item(1,0),ovpoint1.item(2,0)))
+            output.write('.v {0} {1} {2} {3} {4} {5}\n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0),ovpoint1.item(0,0),ovpoint1.item(1,0),ovpoint1.item(2,0)))
             output.write('.color orange\n')
-            output.write('.cylinder {0} {1} {2} {3} {4} {5} 0.1\n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0),ovpoint2.item(0,0),ovpoint2.item(1,0),ovpoint2.item(2,0)))
+            output.write('.v {0} {1} {2} {3} {4} {5}\n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0),ovpoint2.item(0,0),ovpoint2.item(1,0),ovpoint2.item(2,0)))
             output.write('.color green\n')
-            output.write('.cylinder {0} {1} {2} {3} {4} {5} 0.1\n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0),ovpoint3.item(0,0),ovpoint3.item(1,0),ovpoint3.item(2,0)))
+            output.write('.v {0} {1} {2} {3} {4} {5}\n'.format(centerofmass.item(0,0),centerofmass.item(1,0),centerofmass.item(2,0),ovpoint3.item(0,0),ovpoint3.item(1,0),ovpoint3.item(2,0)))
             cc+=1
         if first == False:
-            output.write('{0} {1} {2}\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
+            output.write('{0} {1} {2} 0.1\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
         first = False
         output.write('.comment movement {0} to {1}\n'.format(chimeraline[0][0][0],chimeraline[0][0][1]))
         output.write('.color {0}\n'.format(colors[cc]))
         output.write('.sphere {0} {1} {2} 0.5\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
         output.write('.color white\n')
-        output.write('.cylinder {0} {1} {2} {3} {4} {5} 0.1\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0),xovpoint1.item(0,0),xovpoint1.item(1,0),xovpoint1.item(2,0)))
+        output.write('.v {0} {1} {2} {3} {4} {5}\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0),xovpoint1.item(0,0),xovpoint1.item(1,0),xovpoint1.item(2,0)))
         output.write('.color orange\n')
-        output.write('.cylinder {0} {1} {2} {3} {4} {5} 0.1\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0),xovpoint2.item(0,0),xovpoint2.item(1,0),xovpoint2.item(2,0)))
+        output.write('.v {0} {1} {2} {3} {4} {5}\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0),xovpoint2.item(0,0),xovpoint2.item(1,0),xovpoint2.item(2,0)))
         output.write('.color green\n')
-        output.write('.cylinder {0} {1} {2} {3} {4} {5} 0.1\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0),xovpoint3.item(0,0),xovpoint3.item(1,0),xovpoint3.item(2,0)))
+        output.write('.v {0} {1} {2} {3} {4} {5}\n'.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0),xovpoint3.item(0,0),xovpoint3.item(1,0),xovpoint3.item(2,0)))
         try:
             test = chimeraline[count]
             output.write('.color {0}\n'.format(colors[cc]))
-            output.write('.v {0} {1} {2} '.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
+            output.write('.cylinder {0} {1} {2} '.format(xformed_COM.item(0,0),xformed_COM.item(1,0),xformed_COM.item(2,0)))
             count +=1
         except:
             pass
