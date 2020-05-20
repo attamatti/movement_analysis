@@ -24,4 +24,4 @@ chimeraout.close()
 
 run_chimera = subprocess.Popen('{0} --nogui {1}/chimeracommand.cmd'.format(chimerapath,path), shell=True, stdout=subprocess.PIPE)
 screenbarf = run_chimera.stdout.read()
-print screenbarf
+print (screenbarf)
