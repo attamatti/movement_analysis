@@ -42,14 +42,14 @@ for i in pdbs:
     good_ids = []
     the_data = get_atoms(pdblines)
     for linekey in the_data:
-        print linekey
+        print (linekey)
         if linekey in results_intersect:
             good_ids.append(int(the_data[linekey][4:11].replace(' ','')))
     id_dic = get_atom_ids(the_data)
     good_ids.sort()
 
     for i in good_ids:
-        print i
-        print id_dic[i]
+        print (i)
+        print (id_dic[i])
         output.write('{0}\n'.format(the_data[id_dic[i][0]]))
     output.close()
