@@ -22,6 +22,6 @@ chimeraout = open('chimeracommand.cmd','w')
 chimeraout.write(''.join(chicom))
 chimeraout.close()
 
-run_chimera = subprocess.Popen('{0} --nogui {1}/chimeracommand.cmd'.format(chimerapath,path), shell=True, stdout=subprocess.PIPE)
+run_chimera = subprocess.Popen('$MA_CHIMERA --nogui {0}/chimeracommand.cmd'.format(path), shell=True, stdout=subprocess.PIPE)
 screenbarf = run_chimera.stdout.read()
 print (screenbarf)

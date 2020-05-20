@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #### update the path to chimera here ############
-chimerapath='/Applications/Chimera.app/Contents/MacOS/chimera'
+chimerapath='$MA_CHIMERA'
 #################################################
 
 import os
@@ -11,8 +11,8 @@ import subprocess
 import numpy as np
 
 vers = 0.5
-if os.path.isfile(chimerapath) == False:
-	sys.exit("\nERROR: can't find UCSF Chimera at {0}\nupdate the path by editing the script".format(chimerapath))
+if os.path.isfile(os.environ['MA_CHIMERA']) == False:
+	sys.exit("\nERROR: can't find UCSF Chimera at {0}\nupdate the path by editing the script".format(os.environ['MA_CHIMERA']))
 alignedpath = '{0}/aligned'.format(os.getcwd())
 resultspath = '{0}/Results'.format(os.getcwd())
 tmppath = '{0}/TMP'.format(os.getcwd())
@@ -112,7 +112,7 @@ def order_bodies(subpdblist):
             bodies[i[1]] = [i[0]]
         else:
             bodies[i[1]].append(i[0])
-        bkeys = bodies.keys()
+        bkeys = list(bodies)
     bkeys.sort()
     
     print('''\n----------------------\nbody models (in order)\n----------------------''')
@@ -317,7 +317,7 @@ runchimera = subprocess.Popen('{0} --nogui {1}/chimera_script.cmd 2>/dev/null'.f
 chimeraout = runchimera.stdout.read()
 chimera_outfile = open('{0}/movements_raw.txt'.format(resultspath),'w')
 chimera_data = []
-for i in chimeraout.split('\n'):
+for i in chimeraout.decode().split('\n'):
     chimera_outfile.write('{0}\n'.format(i))
     chimera_data.append(i)
 all_data = parse_chimera_out(chimera_data,body_pairs_inorder)

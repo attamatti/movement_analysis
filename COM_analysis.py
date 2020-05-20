@@ -30,17 +30,13 @@ def calc_dist(xyz1,xyz2):
 def calculateCOM(pdbdata,AArange,chain):
     '''calculate the calpha center of mass for a set of atoms'''
     x,y,z = [],[],[]
-    print len(pdbdata)
     for line in pdbdata:
         if line[0:4] =='ATOM':
-            print line
             if int(line[23:26]) in AArange and line[21] == chain and line[13:16] == 'CA ':
-                print('x')
                 x.append(float(line[31:38]))
                 y.append(float(line[38:47]))
                 z.append(float(line[47:55]))    
     centerofmass = [np.mean(x),np.mean(y),np.mean(z)]
-    print centerofmass
     return(centerofmass)
 
 def startup():
@@ -66,14 +62,12 @@ def calc_COM_diffs(comlist1,comlist2):
 
 ###### run the program
 (pdbs,colmax)=startup()
-print colmax
 allbodies,bodids = get_bodies()
 
 COMSdic = {}                #{filename:[COMbody1, COMbody2, ... COMbodyn]}
 # get COM for each body in each pdb
 for pdbfile in pdbs:
     data = open(pdbfile.replace('\n',''),'r').readlines()
-    print len(data)
     pdbbodlist = []
     for i in allbodies:
         bodyrange = range(i[1][0],i[1][-1])
@@ -82,8 +76,8 @@ for pdbfile in pdbs:
     COMSdic[pdbfile.replace('\n','')] = pdbbodlist
 # feed into correlation analysis
 
-print COMSdic
-COMSkeys = COMSdic.keys()
+
+COMSkeys = list(COMSdic)
 COMSkeys.sort()
 totalCOMdiffs = {}
 bbCOMdiffs = {}
@@ -97,14 +91,11 @@ for i in COMSkeys:
     diffsarray.append(diflist)
 
 for i in totalCOMdiffs:
-    print i,totalCOMdiffs[i]
-for i in bbCOMdiffs:
-    print i,bbCOMdiffs[i]
+    print (i,totalCOMdiffs[i])
 
-# correlation matric for all of the domains combined 
+# correlation matrix for all of the domains combined 
 plt.matshow(diffsarray,cmap='Reds')
 data = np.array(diffsarray)
-print data.shape
 x_pos = np.arange(len(COMSkeys))
 plt.xticks(x_pos,COMSkeys,fontsize='xx-small',rotation='vertical')
 y_pos = np.arange(len(COMSkeys))
