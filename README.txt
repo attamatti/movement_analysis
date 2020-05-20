@@ -15,7 +15,7 @@ Centre of mass (COM) analysis compares different structures based on the locatio
 -=-=-= 
 To use
 -=-=-=
-1) First set the environment variable $MA_CHIMERA in your system to point to your installation.
+1) First set the environment variable $MA_CHIMERA in your system to point to your installation of chimera.
 IE: export MA_CHIMERA=path/to/your/chimera/installation
 
 2) The models must have identical sequences if they don't, use the script seq_norm_pdbs.py to normalize them all to the common sequence
