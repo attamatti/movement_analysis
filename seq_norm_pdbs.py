@@ -38,7 +38,8 @@ results_intersect = set.intersection(*keylist)
 
 for i in pdbs:
     pdblines = open(i,'r').readlines()
-    output = open('SN_{0}'.format(i),'w')
+    filename,path = i.split('/')[-1],'/'.join(i.split('/')[:-1])
+    output = open('{0}/SN_{1}'.format(path,filename),'w')
     good_ids = []
     the_data = get_atoms(pdblines)
     for linekey in the_data:
