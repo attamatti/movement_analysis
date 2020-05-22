@@ -10,8 +10,8 @@ if len(sys.argv) < 5:
 chimerapath='/fbs/emsoftware2/LINUX/fbsmi/Chimera-1.11.2-linux/bin/chimera'
 files = open(sys.argv[1],'r').readlines()
 path = os.getcwd()
-
-chicom = ['open #0 {0}/{1};wait;write #0 {0}/aligned_{1};wait;'.format(path,files[0].replace('\n',''))]
+filename,fpath = os.path.abspath(files[0]).split('/')[-1],'/'.join(os.path.abspath(files[0]).split('/')[:-1])
+chicom = ['open #0 {0}/{1};wait;write #0 {0}/aligned_{1};wait;'.format(fpath,filename)]
 for i in files[1:]:
     i= os.path.abspath(i)
     filename = i.split('/')[-1]
