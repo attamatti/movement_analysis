@@ -48,7 +48,7 @@ def get_files():
 	pdbfiles = open(sys.argv[2],'r').readlines()
 	pdblist = []
 	for i in pdbfiles:
-		i= os.path.abspath(i)
+		i= os.path.abspath(i.replace('\n',''))
 		pdblist.append(i)
 		print(i)
 	return(pdblist)

@@ -37,7 +37,7 @@ for i in pdbs:
 results_intersect = set.intersection(*keylist)
 
 for i in pdbs:
-    i=os.path.abspath(i)
+    i=os.path.abspath(i.replace('\n',''))
     pdblines = open(i,'r').readlines()
     filename,path = i.split('/')[-1],'/'.join(i.split('/')[:-1])
     output = open('SN_{1}'.format(filename),'w')
