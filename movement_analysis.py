@@ -327,7 +327,7 @@ boddic = divide_into_bodies(all_data)
 
 # do the movement analysis and write the bild files
 output = open('{0}/movements.bild'.format(resultspath),'w')
-outdata = open('{0}/movements_data.bild'.format(resultspath),'w')
+outdata = open('{0}/movements_data.txt'.format(resultspath),'w')
 ortho1 = np.array([[10],[0],[0],[1]])
 ortho2 = np.array([[0],[10],[0],[1]])
 ortho3 = np.array([[0],[0],[10],[1]])
