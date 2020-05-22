@@ -46,7 +46,7 @@ for i in pdbs:
     for linekey in the_data:
         if linekey in results_intersect:
             good_ids.append(int(the_data[linekey][4:11].replace(' ','')))
-    sys.stdout.write(' :: {0} atoms'.format(len(the_data)))
+    sys.stdout.write(' :: {0} atoms\n'.format(len(the_data)))
     id_dic = get_atom_ids(the_data)
     good_ids.sort()
     sys.stdout.flush()
