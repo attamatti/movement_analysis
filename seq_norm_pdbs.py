@@ -4,7 +4,7 @@
 # make sure they have the exact same atoms and no more
 
 import sys
-
+import os
 if len(sys.argv) < 2:
     sys.exit('\nUSAGE seq_norm_pdbs.py <pdb 1> <pdb 2> ... <pdb n>')
 
