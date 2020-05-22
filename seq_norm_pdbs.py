@@ -35,22 +35,22 @@ for i in pdbs:
     keylist.append(set(the_data.keys()))
 
 results_intersect = set.intersection(*keylist)
-
+print('pdb sequence normalisation:')
 for i in pdbs:
+    sys.stdout.write(i)
     pdblines = open(i,'r').readlines()
     filename,path = i.split('/')[-1],os.getcwd()
     output = open('{0}/SN_{1}'.format(path,filename),'w')
     good_ids = []
     the_data = get_atoms(pdblines)
     for linekey in the_data:
-        print (linekey)
         if linekey in results_intersect:
             good_ids.append(int(the_data[linekey][4:11].replace(' ','')))
+    sys.stdout.write(' :: {0} atoms'.format(len(the_data)))
     id_dic = get_atom_ids(the_data)
     good_ids.sort()
-
+    sys.stdout.flush()
     for i in good_ids:
-        print (i)
-        print (id_dic[i])
         output.write('{0}\n'.format(the_data[id_dic[i][0]]))
     output.close()
+print('Final pdb files have {0} atoms'.format(len(good_ids)))
