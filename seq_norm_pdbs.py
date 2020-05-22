@@ -4,7 +4,7 @@
 # make sure they have the exact same atoms and no more
 
 import sys
-import os
+
 if len(sys.argv) < 2:
     sys.exit('\nUSAGE seq_norm_pdbs.py <pdb 1> <pdb 2> ... <pdb n>')
 
@@ -37,10 +37,9 @@ for i in pdbs:
 results_intersect = set.intersection(*keylist)
 
 for i in pdbs:
-    i=os.path.abspath(i.replace('\n',''))
     pdblines = open(i,'r').readlines()
     filename,path = i.split('/')[-1],'/'.join(i.split('/')[:-1])
-    output = open('SN_{1}'.format(filename),'w')
+    output = open('{0}/SN_{1}'.format(path,filename),'w')
     good_ids = []
     the_data = get_atoms(pdblines)
     for linekey in the_data:

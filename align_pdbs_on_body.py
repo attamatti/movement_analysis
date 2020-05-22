@@ -10,14 +10,12 @@ if len(sys.argv) < 5:
 chimerapath='/fbs/emsoftware2/LINUX/fbsmi/Chimera-1.11.2-linux/bin/chimera'
 files = open(sys.argv[1],'r').readlines()
 path = os.getcwd()
-filename,fpath = os.path.abspath(files[0].replace('\n','')).split('/')[-1],'/'.join(os.path.abspath(files[0].replace('\n','')).split('/')[:-1])
-chicom = ['open #0 {0}/{1};wait;write #0 {0}/aligned_{1};wait;'.format(fpath,filename)]
+
+chicom = ['open #0 {0}/{1};wait;write #0 {0}/aligned_{1};wait;'.format(path,files[0].replace('\n',''))]
 for i in files[1:]:
-    i= os.path.abspath(i)
-    filename = i.split('/')[-1]
-    chicom.append('open #1 {0};wait;'.format(i))
+    chicom.append('open #1 {0}/{1};wait;'.format(path,i.replace('\n','')))
     chicom.append('mmaker #0:{0}-{1}.{2} #1:{0}-{1}.{2};wait;'.format(sys.argv[2],sys.argv[3],sys.argv[4]))
-    chicom.append('write relative #0 #1 {0}/aligned_{1};wait;'.format(path,filename))
+    chicom.append('write relative #0 #1 {0}/aligned_{1};wait;'.format(path,i.replace('\n','')))
     chicom.append('close #1;wait;')
 
 chimeraout = open('chimeracommand.cmd','w')
@@ -26,5 +24,4 @@ chimeraout.close()
 
 run_chimera = subprocess.Popen('$MA_CHIMERA --nogui {0}/chimeracommand.cmd'.format(path), shell=True, stdout=subprocess.PIPE)
 screenbarf = run_chimera.stdout.read()
-subprocess.call(['rm','chimeracommand.cmd'])
 print (screenbarf)
