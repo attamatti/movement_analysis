@@ -24,4 +24,6 @@ chimeraout.close()
 
 run_chimera = subprocess.Popen('$MA_CHIMERA --nogui {0}/chimeracommand.cmd'.format(path), shell=True, stdout=subprocess.PIPE)
 screenbarf = run_chimera.stdout.read()
-print (screenbarf)
+logfile = open('align_on_body.log','w')
+for i in screenbarf.split('\n'):
+    logfile.write('{0}\n'.format(i))
